@@ -39,7 +39,13 @@ const App = () => {
         border: "1px solid blue",
       }}
     >
-      <VirtualScroll data={data} height={400} itemCount={10000} itemHeight={40} itemRow={itemRow} />
+      <VirtualScroll
+        data={data}
+        height={400}
+        itemCount={10000}
+        itemHeight={40}
+        RowComponent={itemRow}
+      />
     </div>
   );
 };

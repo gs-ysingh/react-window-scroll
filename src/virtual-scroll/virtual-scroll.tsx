@@ -1,40 +1,22 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 
-const useScrollAware = (ref) => {
-  const [scrollTop, setScrollTop] = useState(0);
-
-  const onScroll = (e) => {
-    requestAnimationFrame(() => {
-      setScrollTop(e.target.scrollTop);
-    });
-  };
-
-  useEffect(() => {
-    const container = ref.current;
-    container.addEventListener("scroll", onScroll);
-    return () => {
-      container.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  return scrollTop;
-};
+import useScrollAware from "./use-scroll-aware";
 
 interface Props {
-  itemRow: React.Component;
+  RowComponent: React.FunctionComponent<any>;
   height: number;
   itemHeight: number;
   itemCount: number;
   renderAhread?: number;
-  data: Array<Record<string, string>>;
+  data: Array<Record<string, unknown>>;
 }
 
-const VirtualScroll = ({
-  itemRow,
+const VirtualScroll: React.FC<Props> = ({
+  RowComponent,
   height,
   itemHeight,
   itemCount,
-  renderAhread = 20,
+  renderAhread,
   data,
 }: Props) => {
   const ref = useRef(null);
@@ -46,17 +28,24 @@ const VirtualScroll = ({
   const totalHeight = itemCount * itemHeight;
   const offsetY = startIndex * itemHeight;
   const visibleItemCount = Math.floor(height / itemHeight);
+  const size = startIndex + visibleItemCount + 2 * renderAhread;
 
   const visibleChildren = useMemo(() => {
-    const size = startIndex + visibleItemCount + 2 * renderAhread;
-    const result = data.slice(startIndex, size).map((item) => {
-      return itemRow(item);
-    });
+    const result = data
+      .slice(startIndex, size)
+      .map((item) => <RowComponent key={item.key} {...item} />);
     return result;
-  }, [startIndex, visibleItemCount, renderAhread]);
+  }, [startIndex]);
 
   return (
-    <div ref={ref} className="virtual-scroll" style={{ height: `${height}px`, overflow: "auto" }}>
+    <div
+      ref={ref}
+      className="virtual-scroll"
+      style={{
+        height: `${height}px`,
+        overflow: "auto",
+      }}
+    >
       <div
         style={{
           willChange: "transform",
