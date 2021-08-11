@@ -1,6 +1,6 @@
 {
   "name": "react-window-scroll",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Virtual scroll component",
   "main": "build/index.js",
   "module": "build/index.esm.js",
@@ -14,7 +14,6 @@
     "test:watch": "jest --watch",
     "storybook": "start-storybook -p 6006",
     "storybook:export": "build-storybook",
-    "lint:scss": "stylelint 'src/**/*.scss' --fix",
     "lint:ts": "eslint '{.storybook,src}/**/*.{js,ts,tsx}' --quiet --fix",
     "lint": "run-p lint:*",
     "prettier": "prettier --write \"{.storybook,src}/**/*.{js,ts,tsx}\"",
