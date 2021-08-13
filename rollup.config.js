@@ -1,9 +1,9 @@
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import typescript from "rollup-plugin-typescript2";
-import postcss from "rollup-plugin-postcss";
+import resolve from "@rollup/plugin-node-resolve";
 import copy from "rollup-plugin-copy";
+import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import postcss from "rollup-plugin-postcss";
+import typescript from "rollup-plugin-typescript2";
 
 const packageJson = require("./package.json");
 
@@ -13,13 +13,13 @@ export default {
     {
       file: packageJson.main,
       format: "cjs",
-      sourcemap: true
+      sourcemap: true,
     },
     {
       file: packageJson.module,
       format: "esm",
-      sourcemap: true
-    }
+      sourcemap: true,
+    },
   ],
   plugins: [
     peerDepsExternal(),
@@ -32,14 +32,14 @@ export default {
         {
           src: "src/variables.scss",
           dest: "build",
-          rename: "variables.scss"
+          rename: "variables.scss",
         },
         {
           src: "src/typography.scss",
           dest: "build",
-          rename: "typography.scss"
-        }
-      ]
-    })
-  ]
+          rename: "typography.scss",
+        },
+      ],
+    }),
+  ],
 };

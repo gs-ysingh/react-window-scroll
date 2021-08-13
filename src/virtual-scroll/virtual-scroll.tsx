@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 import useScrollAware from "./use-scroll-aware";
 
@@ -9,6 +9,7 @@ interface Props {
   itemCount: number;
   renderAhread?: number;
   data: Array<Record<string, unknown>>;
+  loadMore?: () => void;
 }
 
 const VirtualScroll: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const VirtualScroll: React.FC<Props> = ({
   itemCount,
   renderAhread,
   data,
+  loadMore,
 }: Props) => {
   const ref = useRef(null);
   const scrollTop = useScrollAware(ref);
@@ -30,12 +32,18 @@ const VirtualScroll: React.FC<Props> = ({
   const visibleItemCount = Math.floor(height / itemHeight);
   const size = startIndex + visibleItemCount + 2 * renderAhread;
 
+  useEffect(() => {
+    if (scrollTop >= data.length * itemHeight - height) {
+      loadMore();
+    }
+  }, [data, itemHeight, scrollTop]);
+
   const visibleChildren = useMemo(() => {
     const result = data
       .slice(startIndex, size)
       .map((item) => <RowComponent key={item.key} {...item} />);
     return result;
-  }, [startIndex]);
+  }, [startIndex, data]);
 
   return (
     <div
@@ -67,6 +75,7 @@ const VirtualScroll: React.FC<Props> = ({
 
 VirtualScroll.defaultProps = {
   renderAhread: 20,
+  loadMore: () => {},
 };
 
 export default VirtualScroll;
