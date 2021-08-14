@@ -56,6 +56,7 @@ interface Item {
 
 const IScroll = () => {
   const [data, setData] = useState<Array<Item>>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const itemRow = ({ name, key }) => {
     return (
       <div
@@ -74,6 +75,7 @@ const IScroll = () => {
   };
 
   const getData = () => {
+    setIsLoading(true);
     return new Promise((resolve) => {
       setTimeout(() => {
         const result = Array(100)
@@ -81,6 +83,7 @@ const IScroll = () => {
           .map((_, index) => {
             return { key: index, name: (Math.random() + 1).toString(36).substring(7) };
           });
+        setIsLoading(false);
         resolve(result);
       }, 3000);
     });
@@ -104,6 +107,21 @@ const IScroll = () => {
         border: "1px solid blue",
       }}
     >
+      {isLoading && (
+        <div
+          style={{
+            background: "lightgray",
+            height: "400px",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+          }}
+        >
+          Loading...
+        </div>
+      )}
       <VirtualScroll
         data={data}
         height={400}
